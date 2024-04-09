@@ -1,40 +1,40 @@
 '''
-    Демонстрация побочных эффектов передачи по ссылке
+    Р”РµРјРѕРЅСЃС‚СЂР°С†РёСЏ РїРѕР±РѕС‡РЅС‹С… СЌС„С„РµРєС‚РѕРІ РїРµСЂРµРґР°С‡Рё РїРѕ СЃСЃС‹Р»РєРµ
 '''
 
 class Unit:
-    name : str = 'Крестьянин' # Название боевой единицы
-    attack : int = 1 # Атака
-    defence : int = 1 # Защита
-    health : int = 1 # Максимальное здоровье
-    speed : int = 3 # Скорость передвижения
-    min_damage : int = 1 # Минимальный урон
-    max_damage : int = 1 # Максимальный урон
+    name : str = 'РљСЂРµСЃС‚СЊСЏРЅРёРЅ' # РќР°Р·РІР°РЅРёРµ Р±РѕРµРІРѕР№ РµРґРёРЅРёС†С‹
+    attack : int = 1 # РђС‚Р°РєР°
+    defence : int = 1 # Р—Р°С‰РёС‚Р°
+    health : int = 1 # РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ
+    speed : int = 3 # РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРґРІРёР¶РµРЅРёСЏ
+    min_damage : int = 1 # РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ
+    max_damage : int = 1 # РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ
     
 def print_unit(unit : Unit) -> None:
-    print(f'Название: {unit.name}')
-    print(f'Атака: {unit.attack}')
-    print(f'Защита: {unit.defence}')
-    print(f'Здоровье: {unit.health}')
-    print(f'Скорость: {unit.speed}')
-    print(f'Минимальный урон: {unit.min_damage}')
-    print(f'Максимальный урон: {unit.max_damage}')
+    print(f'РќР°Р·РІР°РЅРёРµ: {unit.name}')
+    print(f'РђС‚Р°РєР°: {unit.attack}')
+    print(f'Р—Р°С‰РёС‚Р°: {unit.defence}')
+    print(f'Р—РґРѕСЂРѕРІСЊРµ: {unit.health}')
+    print(f'РЎРєРѕСЂРѕСЃС‚СЊ: {unit.speed}')
+    print(f'РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ: {unit.min_damage}')
+    print(f'РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ: {unit.max_damage}')
     
 def print_class(class_instance : Unit) -> None:
     if isinstance(class_instance, Unit):
         print_unit(class_instance)
     else:
-        print('Неизвестный класс')
+        print('РќРµРёР·РІРµСЃС‚РЅС‹Р№ РєР»Р°СЃСЃ')
 
 def change_unit(unit : Unit) -> None:
-    ''' Изменяет имя юнита на "Кочевник" '''
+    ''' РР·РјРµРЅСЏРµС‚ РёРјСЏ СЋРЅРёС‚Р° РЅР° "РљРѕС‡РµРІРЅРёРє" '''
     if isinstance(unit, Unit):
-        unit.name = 'Кочевник'
+        unit.name = 'РљРѕС‡РµРІРЅРёРє'
     else:
-        print('Ошибка, неверный тип аргумента') 
+        print('РћС€РёР±РєР°, РЅРµРІРµСЂРЅС‹Р№ С‚РёРї Р°СЂРіСѓРјРµРЅС‚Р°') 
         
 unit_angel = Unit()
-unit_angel.name = 'Ангел'
+unit_angel.name = 'РђРЅРіРµР»'
 unit_angel.attack = 20
 unit_angel.defence = 20
 unit_angel.health = 200
@@ -44,6 +44,6 @@ unit_angel.max_damage = 50
 
 print_unit(unit_angel)
 unit_nomad = unit_angel
-change_unit(unit_nomad) # Передача по ссылке, обе переменные ссылаются на один объект
-print_unit(unit_angel) # Неожиданные изменения в имени юнита
+change_unit(unit_nomad) # РџРµСЂРµРґР°С‡Р° РїРѕ СЃСЃС‹Р»РєРµ, РѕР±Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃСЃС‹Р»Р°СЋС‚СЃСЏ РЅР° РѕРґРёРЅ РѕР±СЉРµРєС‚
+print_unit(unit_angel) # РќРµРѕР¶РёРґР°РЅРЅС‹Рµ РёР·РјРµРЅРµРЅРёСЏ РІ РёРјРµРЅРё СЋРЅРёС‚Р°
 
