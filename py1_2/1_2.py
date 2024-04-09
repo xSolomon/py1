@@ -56,6 +56,7 @@ def print_hero(hero : Hero) -> None:
         print(f'    {skill}: {level}')
     
 def print_class(class_instance : Unit | Spell | Hero) -> None:
+	''' Вывод информации об объектах на экран '''
     if isinstance(class_instance, Unit):
         print_unit(class_instance)
     elif isinstance(class_instance, Spell):
