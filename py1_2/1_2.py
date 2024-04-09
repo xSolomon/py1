@@ -1,73 +1,73 @@
 '''
-    Упрощенная модель юнитов, заклинаний и героя из игры HoMM3
+    РЈРїСЂРѕС‰РµРЅРЅР°СЏ РјРѕРґРµР»СЊ СЋРЅРёС‚РѕРІ, Р·Р°РєР»РёРЅР°РЅРёР№ Рё РіРµСЂРѕСЏ РёР· РёРіСЂС‹ HoMM3
 '''
 
 class Unit:
-    name : str = 'Крестьянин' # Название боевой единицы
-    attack : int = 1 # Атака
-    defence : int = 1 # Защита
-    health : int = 1 # Максимальное здоровье
-    speed : int = 3 # Скорость передвижения
-    min_damage : int = 1 # Минимальный урон
-    max_damage : int = 1 # Максимальный урон
+    name : str = 'РљСЂРµСЃС‚СЊСЏРЅРёРЅ' # РќР°Р·РІР°РЅРёРµ Р±РѕРµРІРѕР№ РµРґРёРЅРёС†С‹
+    attack : int = 1 # РђС‚Р°РєР°
+    defence : int = 1 # Р—Р°С‰РёС‚Р°
+    health : int = 1 # РњР°РєСЃРёРјР°Р»СЊРЅРѕРµ Р·РґРѕСЂРѕРІСЊРµ
+    speed : int = 3 # РЎРєРѕСЂРѕСЃС‚СЊ РїРµСЂРµРґРІРёР¶РµРЅРёСЏ
+    min_damage : int = 1 # РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ
+    max_damage : int = 1 # РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ
     
-magic_schools : tuple = ['Вода', 'Огонь', 'Земля', 'Воздух']
+magic_schools : tuple = ['Р’РѕРґР°', 'РћРіРѕРЅСЊ', 'Р—РµРјР»СЏ', 'Р’РѕР·РґСѓС…']
 
 class Spell:
-    name : str = 'Ускорение' # Название заклинания
-    manacost : int = 6 # Стоимость маны
-    magic_schools : set = ['Воздух'] # Школы магии, к которым принадлежит заклинание
+    name : str = 'РЈСЃРєРѕСЂРµРЅРёРµ' # РќР°Р·РІР°РЅРёРµ Р·Р°РєР»РёРЅР°РЅРёСЏ
+    manacost : int = 6 # РЎС‚РѕРёРјРѕСЃС‚СЊ РјР°РЅС‹
+    magic_schools : set = ['Р’РѕР·РґСѓС…'] # РЁРєРѕР»С‹ РјР°РіРёРё, Рє РєРѕС‚РѕСЂС‹Рј РїСЂРёРЅР°РґР»РµР¶РёС‚ Р·Р°РєР»РёРЅР°РЅРёРµ
 
 class Hero:
-    name : str = 'Адель' # Имя героя
-    attack : int = 1 # Атака
-    defence : int = 0 # Защита
-    spell_power : int = 2 # Сила заклинаний
-    knowledge : int = 2 # Знания
-    skills : dict = { # Навыки и уровень владения (Базовый, Продвинутый или Экспертный)
-        'Мудрость': 'Базовый',
-        'Дипломатия': 'Базовый'
+    name : str = 'РђРґРµР»СЊ' # РРјСЏ РіРµСЂРѕСЏ
+    attack : int = 1 # РђС‚Р°РєР°
+    defence : int = 0 # Р—Р°С‰РёС‚Р°
+    spell_power : int = 2 # РЎРёР»Р° Р·Р°РєР»РёРЅР°РЅРёР№
+    knowledge : int = 2 # Р—РЅР°РЅРёСЏ
+    skills : dict = { # РќР°РІС‹РєРё Рё СѓСЂРѕРІРµРЅСЊ РІР»Р°РґРµРЅРёСЏ (Р‘Р°Р·РѕРІС‹Р№, РџСЂРѕРґРІРёРЅСѓС‚С‹Р№ РёР»Рё Р­РєСЃРїРµСЂС‚РЅС‹Р№)
+        'РњСѓРґСЂРѕСЃС‚СЊ': 'Р‘Р°Р·РѕРІС‹Р№',
+        'Р”РёРїР»РѕРјР°С‚РёСЏ': 'Р‘Р°Р·РѕРІС‹Р№'
     }
     
 def print_unit(unit : Unit) -> None:
-    print(f'Название: {unit.name}')
-    print(f'Атака: {unit.attack}')
-    print(f'Защита: {unit.defence}')
-    print(f'Здоровье: {unit.health}')
-    print(f'Скорость: {unit.speed}')
-    print(f'Минимальный урон: {unit.min_damage}')
-    print(f'Максимальный урон: {unit.max_damage}')
+    print(f'РќР°Р·РІР°РЅРёРµ: {unit.name}')
+    print(f'РђС‚Р°РєР°: {unit.attack}')
+    print(f'Р—Р°С‰РёС‚Р°: {unit.defence}')
+    print(f'Р—РґРѕСЂРѕРІСЊРµ: {unit.health}')
+    print(f'РЎРєРѕСЂРѕСЃС‚СЊ: {unit.speed}')
+    print(f'РњРёРЅРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ: {unit.min_damage}')
+    print(f'РњР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СѓСЂРѕРЅ: {unit.max_damage}')
 
 def print_spell(spell : Spell) -> None:
-    print(f'Название: {spell.name}')
-    print(f'Манакост: {spell.manacost}')
-    print('Школы магии, к которым относится заклинание:')
+    print(f'РќР°Р·РІР°РЅРёРµ: {spell.name}')
+    print(f'РњР°РЅР°РєРѕСЃС‚: {spell.manacost}')
+    print('РЁРєРѕР»С‹ РјР°РіРёРё, Рє РєРѕС‚РѕСЂС‹Рј РѕС‚РЅРѕСЃРёС‚СЃСЏ Р·Р°РєР»РёРЅР°РЅРёРµ:')
     for magic_school in spell.magic_schools:
         print(f'    {magic_school}')
 
 def print_hero(hero : Hero) -> None:
-    print(f'Имя: {hero.name}')
-    print(f'Атака: {hero.attack}')
-    print(f'Защита: {hero.defence}')
-    print(f'Сила заклинаний: {hero.spell_power}')
-    print(f'Знания: {hero.knowledge}')
-    print('Навыки:')
+    print(f'РРјСЏ: {hero.name}')
+    print(f'РђС‚Р°РєР°: {hero.attack}')
+    print(f'Р—Р°С‰РёС‚Р°: {hero.defence}')
+    print(f'РЎРёР»Р° Р·Р°РєР»РёРЅР°РЅРёР№: {hero.spell_power}')
+    print(f'Р—РЅР°РЅРёСЏ: {hero.knowledge}')
+    print('РќР°РІС‹РєРё:')
     for skill, level in hero.skills.items():
         print(f'    {skill}: {level}')
     
 def print_class(class_instance : Unit | Spell | Hero) -> None:
-	''' Вывод информации об объектах на экран '''
-    if isinstance(class_instance, Unit):
-        print_unit(class_instance)
-    elif isinstance(class_instance, Spell):
-        print_spell(class_instance)
-    elif isinstance(class_instance, Hero):
-        print_hero(class_instance)
-    else:
-        print('Неизвестный класс')
+	''' Р’С‹РІРѕРґ РёРЅС„РѕСЂРјР°С†РёРё РѕР± РѕР±СЉРµРєС‚Р°С… РЅР° СЌРєСЂР°РЅ '''
+	if isinstance(class_instance, Unit):
+	    print_unit(class_instance)
+	elif isinstance(class_instance, Spell):
+	    print_spell(class_instance)
+	elif isinstance(class_instance, Hero):
+	    print_hero(class_instance)
+	else:
+	    print('РќРµРёР·РІРµСЃС‚РЅС‹Р№ РєР»Р°СЃСЃ')
 
 unit_angel = Unit()
-unit_angel.name = 'Ангел'
+unit_angel.name = 'РђРЅРіРµР»'
 unit_angel.attack = 20
 unit_angel.defence = 20
 unit_angel.health = 200
@@ -77,19 +77,22 @@ unit_angel.max_damage = 50
 print_class(unit_angel)
 
 spell_magic_arrow = Spell()
-spell_magic_arrow.name = 'Волшебная стрела'
+spell_magic_arrow.name = 'Р’РѕР»С€РµР±РЅР°СЏ СЃС‚СЂРµР»Р°'
 spell_magic_arrow.manacost = 5
 spell_magic_arrow.magic_schools = magic_schools
 print_class(spell_magic_arrow)
 
 hero_valeska = Hero()
-hero_valeska.name = "Валеска"
+hero_valeska.name = "Р’Р°Р»РµСЃРєР°"
 hero_valeska.attack = 2
 hero_valeska.defence = 2
 hero_valeska.spell_power = 0
 hero_valeska.knowledge = 1
 hero_valeska.skills = {
-    'Лидерство': 'Базовый',
-    'Стрельба': 'Базовый'
+    'Р›РёРґРµСЂСЃС‚РІРѕ': 'Р‘Р°Р·РѕРІС‹Р№',
+    'РЎС‚СЂРµР»СЊР±Р°': 'Р‘Р°Р·РѕРІС‹Р№'
 }
 print_class(hero_valeska)
+
+
+
