@@ -92,4 +92,3 @@ hero_valeska.skills = {
     'Стрельба': 'Базовый'
 }
 print_class(hero_valeska)
-
