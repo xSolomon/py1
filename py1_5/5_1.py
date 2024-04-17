@@ -26,7 +26,7 @@ class Car:
             self._speed = 0
     
     def stop(self) -> None:
-        ''' Остановка вагон '''
+        ''' Остановка вагона '''
         self._speed = 0
     
 class FreightCar(Car):
