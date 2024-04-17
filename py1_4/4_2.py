@@ -83,7 +83,7 @@ class PassengerCar(Car):
         ''' Возвращает число пассажиров в вагоне '''
         return self._passengers_number
     
-    def change_passengers(self, passengers_number_delta : int) -> None:
+    def add_passengers(self, passengers_number_delta : int) -> None:
         ''' Изменяет количество пассажиров в вагоне на указанное число.
             Положительное означает посадку, отрицательное - высадку '''
         self._passengers_number += passengers_number_delta
@@ -144,8 +144,8 @@ class FreightTrain(Train):
             return False
     
     def add_cargo(self, car_index : int, cargo : str, cargo_weight : int) -> None:
-        ''' Добавление груза в указанный вагон.
-            Возвращает True в случае успеха и False иначе ''' 
+        ''' Добавить груз в указанный вагон.
+            Если там содержится другой товар - сначала выгрузить его. ''' 
         self.stop()
         self._car_list[car_index].load(cargo, cargo_weight)
     
@@ -167,11 +167,11 @@ class PassengerTrain(Train):
         else:
             return False
     
-    def change_passengers(self, car_index : int, passengers_number_delta : int) -> None:
+    def add_passengers(self, car_index : int, passengers_number_delta : int) -> None:
         ''' Изменяет количество пассажиров в указанном вагоне.
             Положительное число означает посадку, отрицательное - высадку '''
         self.stop()
-        self._car_list[car_index].change_passengers(passengers_number_delta)
+        self._car_list[car_index].add_passengers(passengers_number_delta)
     
     def unload(self) -> None:
         ''' Остановка и высадка всех пассажиров из поезда '''
@@ -191,7 +191,7 @@ passenger_car2 = PassengerCar(0, 46, 2)
 print(passenger_car1.get_passengers_number())
 passenger_train1 = PassengerTrain(50, [passenger_car1])
 passenger_train1.add_car(passenger_car2)
-passenger_train1.change_passengers(1, -46)
+passenger_train1.add_passengers(1, -46)
 passenger_car3 = passenger_train1.remove_car(-1)
 print(passenger_car3.get_passengers_number())
 
