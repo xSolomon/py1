@@ -1,9 +1,15 @@
 '''
-    Две косвенно связанные иерархии классов:
-    Вагон: грузовой/пассажирский
-    Поезд: грузовой/пассажирский
+    Массив из 500 случайных объектов Car
+    Добавлен метод print() к иерархии Car
 '''
 
+''' Данная программа наглядно демонстрирует полиморфизм подтипов.
+    Благодаря ему мы можем пользоваться единым интерфейсом для разных типов иерархии.
+    Интерпретатор автоматически выбирает нужную версию метода print(), в зависимости
+    от типа параметра: print(FreightCar freight_car) или print(PassengerCar passenger_car)
+'''
+
+from random import randint
 from copy import deepcopy
 from functools import reduce
 from collections import deque
@@ -26,8 +32,11 @@ class Car:
             self._speed = 0
     
     def stop(self) -> None:
-        ''' Остановка вагона '''
+        ''' Остановка вагон '''
         self._speed = 0
+        
+    def print(self) -> None:
+        print('Car::print()')
     
 class FreightCar(Car):
     ''' Грузовой вагон, способный вместить лишь один тип товара '''
@@ -69,6 +78,9 @@ class FreightCar(Car):
             self.unload()
             self._change_cargo(cargo, cargo_weight)
     
+    def print(self) -> None:
+        print('FreightCar::print()')
+    
 class PassengerCar(Car):
     ''' Пассажирский вагон '''
     def __init__(self, speed : int, passengers_number : int,
@@ -98,101 +110,13 @@ class PassengerCar(Car):
         ''' Закрепление другого проводника за вагоном '''
         self._conductor_id = conductor_id
         
-class Train():
-    def __init__(self, speed : int):
-        self._speed = speed # Начальная скорость, км/ч
-        if self._speed < 0:
-            self._speed = 0
-        self._car_list : list = [] # Список вагонов поезда
-    
-    def cars_number(self) -> int:
-        ''' Возвращает число вагонов в данном поезде '''
-        return len(self._car_list)
-     
-    def move(self, speed : int) -> None:
-        ''' Движение поезда с заданной скоростью '''
-        self._speed = speed
-        if self._speed < 0:
-            self._speed = 0
-        consume_entirely(map(lambda car : car.set_speed(self._speed), self._car_list))
+    def print(self) -> None:
+        print('PassengerCar::print()')
 
-    def stop(self) -> None:
-        ''' Остановка поезда '''
-        self._speed = 0
-        consume_entirely(map(lambda car : car.stop(), self._car_list))
-        
-    def add_car(self, car : Car) -> None:
-        ''' Добавляет вагон к составу. Осуществляется глубокое копирование '''
-        self._car_list.append(deepcopy(car))
-        self._car_list[-1].set_speed(self._speed)
-    
-    def remove_car(self, car_index : int) -> Car:
-        ''' Удаляет вагон под заданным номером из состава и возвращает ссылку на него '''
-        return self._car_list.pop(car_index)
-        
-class FreightTrain(Train):
-    def __init__(self, speed : int, freight_car_list : list):
-        super().__init__(speed)
-        consume_entirely(map(self.add_car, freight_car_list))
-    
-    def add_car(self, freight_car : FreightCar) -> bool:
-        ''' Добавляет грузовой вагон к составу. Возвращает True в случае успеха и False иначе '''
-        if isinstance(freight_car, FreightCar):
-            super().add_car(freight_car)
-            return True
-        else:
-            return False
-    
-    def add_cargo(self, car_index : int, cargo : str, cargo_weight : int) -> None:
-        ''' Добавить груз в указанный вагон.
-            Если там содержится другой товар - сначала выгрузить его. ''' 
-        self.stop()
-        self._car_list[car_index].load(cargo, cargo_weight)
-    
-    def unload(self) -> None:
-        ''' Остановка и опустошение всех вагонов '''
-        self.stop()
-        consume_entirely(map(lambda freight_car : freight_car.unload(), self._car_list))
-    
-class PassengerTrain(Train):
-    def __init__(self, speed : int, passenger_car_list : list):
-        super().__init__(speed)
-        consume_entirely(map(self.add_car, passenger_car_list))
-    
-    def add_car(self, passenger_car : PassengerCar) -> bool:
-        ''' Добавляет пассажирский вагон к составу. Возвращает True в случае успеха и False иначе. '''
-        if isinstance(passenger_car, PassengerCar):
-            super().add_car(passenger_car)
-            return True
-        else:
-            return False
-    
-    def add_passengers(self, car_index : int, passengers_number_delta : int) -> None:
-        ''' Изменяет количество пассажиров в указанном вагоне.
-            Положительное число означает посадку, отрицательное - высадку '''
-        self.stop()
-        self._car_list[car_index].add_passengers(passengers_number_delta)
-    
-    def unload(self) -> None:
-        ''' Остановка и высадка всех пассажиров из поезда '''
-        self.stop()
-        consume_entirely(map(lambda passenger_car : passenger_car.unload(), self._car_list))
-    
-        
-freight_car1 = FreightCar(0, "Уголь", 100)
-freight_car2 = FreightCar(0, "Железная руда", 200)
-freight_train1 = FreightTrain(0, [freight_car1, freight_car2])
-freight_train1.unload()
-freight_train1.move(10)
-print(freight_train1.cars_number())
+def get_random_car() -> Car:
+    ''' Возвращает объект случайного типа из двух: PassengerCar и FreightCar '''
+    return FreightCar(0, '', 0) if randint(0, 1) else PassengerCar(0, 0, 0)
 
-passenger_car1 = PassengerCar(100, 37, 1)
-passenger_car2 = PassengerCar(0, 46, 2)
-print(passenger_car1.get_passengers_number())
-passenger_train1 = PassengerTrain(50, [passenger_car1])
-passenger_train1.add_car(passenger_car2)
-passenger_train1.add_passengers(1, -46)
-passenger_car3 = passenger_train1.remove_car(-1)
-print(passenger_car3.get_passengers_number())
-
-
+car_list : list = [get_random_car() for i in range(500)]
+consume_entirely(map(lambda car : car.print(), car_list))
+print(len(car_list))
