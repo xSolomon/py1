@@ -1,0 +1,2 @@
+import simple_math.square
+import simple_math.cube
