@@ -41,7 +41,7 @@ class Castle:
         return self.__units_in_harrizon
     
     def set_units_in_harrizon(self, value) -> None:
-        self.units_in_harrizon = 0 if value <= 0 else value
+        self.__units_in_harrizon = 0 if value <= 0 else value
     
     def upgrade_income(self) -> None:
         ''' Увеличивает ежедневный доход замка, затрачивая деньги '''
