@@ -38,9 +38,9 @@ def bubble_sort(int_array : list[int]) -> None:
     swaps_occured : bool = True
     for i in range(len(int_array)):
         swaps_occured = False
-        for i in range(len(int_array) - i - 1):
-            if int_array[i] > int_array[i + 1]:
-                int_array[i], int_array[i + 1] = int_array[i + 1], int_array[i]
+        for j in range(len(int_array) - i - 1):
+            if int_array[j] > int_array[j + 1]:
+                int_array[j], int_array[j + 1] = int_array[j + 1], int_array[j]
                 swaps_occured = True
         if not swaps_occured:
             break;
