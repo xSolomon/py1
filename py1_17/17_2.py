@@ -13,7 +13,8 @@ def write_text_in_center_and_save_as(from_ext : str, to_ext : str) -> None:
                 canvas : ImageDraw = ImageDraw.Draw(image)
                 size : tuple = image.size
                 # Квадрат размером 50x50
-                canvas.rectangle([size[0] / 2 - 25,size[1] / 2 - 25, size[0] / 2 + 25,size[1] / 2 + 25])
+                canvas.rectangle([size[0] / 2 - 25,size[1] / 2 - 25, \
+                    size[0] / 2 + 25,size[1] / 2 + 25])
                 canvas.multiline_text((size[0] / 2 - 20, size[1] / 2 - 20), 'Hello,\nWorld!')
                 image.save(os.path.splitext(file_or_dir)[0] + to_ext)
                 del canvas

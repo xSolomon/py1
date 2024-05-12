@@ -6,16 +6,16 @@ import unittest
 from random import randint
 
 class BubbleSortTests(unittest.TestCase):
+    ''' Набор тестов для функции сортировки '''
     def test_regression_1(self) -> None:
+        ''' Регрессивный тест, массив из 10 чисел в обратном порядке '''
         test_list : list[int] = [i for i in range(10, 0, -1)]
         bubble_sort(test_list)
-        self.assertEqual(test_list, [i for i in range(1, 11)])
-        
+        self.assertEqual(test_list, [i for i in range(1, 11)])      
     def test_regression_2(self) -> None:
         test_list : list[int] = [i for i in range(1, 10)]
         bubble_sort(test_list)
         self.assertEqual(test_list, [i for i in range(1, 10)])
-    
     def test_empty_list(self) -> None:
         test_list : list[int] = []
         bubble_sort(test_list)

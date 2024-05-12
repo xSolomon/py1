@@ -1,5 +1,6 @@
-from PIL import Image
+''' Урок 17, задание 1 '''
 import os
+from PIL import Image
 
 def change_images_extenstion(from_ext : str, to_ext : str) -> None:
     ''' Изменяет формат всех изображений указанного расширения в текущем каталоге '''
