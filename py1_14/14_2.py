@@ -5,7 +5,7 @@
 from random import randint
 
 def sum_six_numbers_from_two_random_files(first_number : int = randint(1, 10),
-    second_number : int = randint(1, 10), filepath : str = 'files/') -> list:
+    second_number : int = randint(1, 10), filepath : str = 'files/') -> list[int, int]:
     ''' Возвращает сумму шести чисел из двух файлов с именами, заданными аргументами 
         функции и расширением .txt
         Возвращает пару значений: итоговая сумма и код ошибки, где код ошибки:
