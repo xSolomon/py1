@@ -5,21 +5,31 @@
 from random import randint
 
 def sum_six_numbers_from_two_random_files(first_number : int = randint(1, 10),
-    second_number : int = randint(1, 10), filepath : str = 'files/') -> int | str:
+    second_number : int = randint(1, 10), filepath : str = 'files/') -> list:
     ''' Возвращает сумму шести чисел из двух файлов с именами, заданными аргументами 
         функции и расширением .txt
-        В случае ошибки возвращает строку-сообщение с подробностями'''
-    filename_list : list[str] = [f'{filepath}{i}.txt' for i in [first_number, second_number]]
+        Возвращает пару значений: итоговая сумма и код ошибки, где код ошибки:
+        0 - ошибок нет
+        1 - один из файлов не существует
+        2 - один из файлов содержит неполные или повреждённые данные
+        3 - иные ошибки'''
+    filename_list : list = [f'{filepath}{i}.txt' for i in [first_number, second_number]]
     number_sum : int = 0
-    for filename in filename_list:
-        try:
+    error_code : int = 0
+    try:
+        for filename in filename_list:
             with open(filename) as fin:
                 for i in range(3):
                     number_sum += int(fin.readline().rstrip())
-        except FileNotFoundError:
-            return f'Ошибка. Файл с именем {filename} не существует'
-        except ValueError:
-            return f'Ошибка. Файл с именем {filename} содержит неполные или повреждённые данные'
-    return number_sum
-	
-print(sum_six_numbers_from_two_random_files())
+    except FileNotFoundError:
+        number_sum = 0
+        error_code = 1
+    except ValueError:
+        number_sum = 0
+        error_code = 2
+    except:
+        number_sum = 0
+        error_code = 3
+    return [number_sum, error_code]
+
+print(sum_six_numbers_from_two_random_files()[1])
