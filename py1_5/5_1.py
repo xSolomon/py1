@@ -26,7 +26,7 @@ class Car:
             self._speed = 0
     
     def stop(self) -> None:
-        ''' Остановка вагон '''
+        ''' Остановка вагона '''
         self._speed = 0
     
 class FreightCar(Car):
@@ -83,7 +83,7 @@ class PassengerCar(Car):
         ''' Возвращает число пассажиров в вагоне '''
         return self._passengers_number
     
-    def add_passengers(self, passengers_number_delta : int) -> None:
+    def change_passengers(self, passengers_number_delta : int) -> None:
         ''' Изменяет количество пассажиров в вагоне на указанное число.
             Положительное означает посадку, отрицательное - высадку '''
         self._passengers_number += passengers_number_delta
@@ -97,30 +97,76 @@ class PassengerCar(Car):
     def change_conductor(self, conductor_id : int) -> None:
         ''' Закрепление другого проводника за вагоном '''
         self._conductor_id = conductor_id
+
+class DieselLocomotive():
+    ''' Тепловоз, работающий на дизельном топливе '''
+    def __init__(self, speed : int, fuel : int):
+        self._speed : int = speed # Начальная скорость локомотива, км/ч
+        self._fuel : int = fuel # Объём топлива, л
+    
+    def move(self, speed : int, cars_number : int = 0) -> bool:
+        ''' Движение локомотива с заданной скоростью. Расходует топливо, пропорциональное 
+            количеству вагонов, которые движутся в составе.
+            Топливо расходует и сам локомотив'''
+        if speed <= 0:
+            self._speed = 0
+            return True
+        if cars_number < 0:
+            cars_number = 0
+        fuel_cost = (cars_number + 1) * 15
+        if self._fuel >= fuel_cost:
+            self._fuel -= fuel_cost
+            self._speed = speed
+            return True
+        return False
+            
+    
+    def stop(self) -> None:
+        ''' Остановка локомотива '''
+        self._speed = 0
+    
+    def change_fuel(self, fuel_delta : int) -> None:
+        ''' Изменение количества топлива в баках на указанное число.
+            Положительное означает пополнение, отрицательное - слив топлива из баков.'''
+        self._fuel == fuel_delta
+        if self._fuel < 0:
+            self._fuel = 0
         
+   
 class Train():
-    def __init__(self, speed : int):
+    def __init__(self, speed : int, locomotive : DieselLocomotive):
         self._speed = speed # Начальная скорость, км/ч
         if self._speed < 0:
             self._speed = 0
+        self._locomotive : DieselLocomotive = locomotive # Локомотив поезда, обязателен
         self._car_list : list = [] # Список вагонов поезда
     
     def cars_number(self) -> int:
         ''' Возвращает число вагонов в данном поезде '''
         return len(self._car_list)
      
-    def move(self, speed : int) -> None:
-        ''' Движение поезда с заданной скоростью '''
-        self._speed = speed
-        if self._speed < 0:
-            self._speed = 0
-        consume_entirely(map(lambda car : car.set_speed(self._speed), self._car_list))
+    def move(self, speed : int) -> bool:
+        ''' Движение поезда с заданной скоростью. Возвращает True в случае, если у 
+            локомотива достаточно топлива для движения, иначе False.'''
+        if speed < 0:
+            speed = 0
+        if self._locomotive.move(speed, len(self._car_list)):
+            consume_entirely(map(lambda car : car.set_speed(self._speed), self._car_list))
+            return True
+        return False
 
     def stop(self) -> None:
         ''' Остановка поезда '''
         self._speed = 0
+        self._locomotive.stop()
         consume_entirely(map(lambda car : car.stop(), self._car_list))
-        
+    
+    def change_fuel(self, fuel_delta : int) -> None:
+        ''' Изменение количества топлива в баках на указанное число.
+            Положительное означает пополнение, отрицательное - слив топлива из баков.'''
+        self.stop()
+        self._locomotive.change_fuel(fuel_delta)
+    
     def add_car(self, car : Car) -> None:
         ''' Добавляет вагон к составу. Осуществляется глубокое копирование '''
         self._car_list.append(deepcopy(car))
@@ -131,8 +177,8 @@ class Train():
         return self._car_list.pop(car_index)
         
 class FreightTrain(Train):
-    def __init__(self, speed : int, freight_car_list : list):
-        super().__init__(speed)
+    def __init__(self, speed : int, locomotive : DieselLocomotive, freight_car_list : list = []):
+        super().__init__(speed, locomotive)
         consume_entirely(map(self.add_car, freight_car_list))
     
     def add_car(self, freight_car : FreightCar) -> bool:
@@ -144,8 +190,8 @@ class FreightTrain(Train):
             return False
     
     def add_cargo(self, car_index : int, cargo : str, cargo_weight : int) -> None:
-        ''' Добавить груз в указанный вагон.
-            Если там содержится другой товар - сначала выгрузить его. ''' 
+        ''' Добавление груза в указанный вагон.
+            Возвращает True в случае успеха и False иначе ''' 
         self.stop()
         self._car_list[car_index].load(cargo, cargo_weight)
     
@@ -155,8 +201,8 @@ class FreightTrain(Train):
         consume_entirely(map(lambda freight_car : freight_car.unload(), self._car_list))
     
 class PassengerTrain(Train):
-    def __init__(self, speed : int, passenger_car_list : list):
-        super().__init__(speed)
+    def __init__(self, speed : int, locomotive : DieselLocomotive, passenger_car_list : list = []):
+        super().__init__(speed, locomotive)
         consume_entirely(map(self.add_car, passenger_car_list))
     
     def add_car(self, passenger_car : PassengerCar) -> bool:
@@ -167,11 +213,11 @@ class PassengerTrain(Train):
         else:
             return False
     
-    def add_passengers(self, car_index : int, passengers_number_delta : int) -> None:
+    def change_passengers(self, car_index : int, passengers_number_delta : int) -> None:
         ''' Изменяет количество пассажиров в указанном вагоне.
             Положительное число означает посадку, отрицательное - высадку '''
         self.stop()
-        self._car_list[car_index].add_passengers(passengers_number_delta)
+        self._car_list[car_index].change_passengers(passengers_number_delta)
     
     def unload(self) -> None:
         ''' Остановка и высадка всех пассажиров из поезда '''
@@ -179,20 +225,30 @@ class PassengerTrain(Train):
         consume_entirely(map(lambda passenger_car : passenger_car.unload(), self._car_list))
     
         
+locomotive1 = DieselLocomotive(0, 1000)
 freight_car1 = FreightCar(0, "Уголь", 100)
 freight_car2 = FreightCar(0, "Железная руда", 200)
-freight_train1 = FreightTrain(0, [freight_car1, freight_car2])
+
+freight_train1 = FreightTrain(0, locomotive1, [freight_car1, freight_car2])
 freight_train1.unload()
-freight_train1.move(10)
+print(freight_train1.move(10))
 print(freight_train1.cars_number())
 
+locomotive2 = DieselLocomotive(0, 0)
 passenger_car1 = PassengerCar(100, 37, 1)
 passenger_car2 = PassengerCar(0, 46, 2)
 print(passenger_car1.get_passengers_number())
-passenger_train1 = PassengerTrain(50, [passenger_car1])
+
+passenger_train1 = PassengerTrain(50, locomotive2)
+print(passenger_train1.move(17))
+passenger_train1.add_car(passenger_car1)
 passenger_train1.add_car(passenger_car2)
-passenger_train1.add_passengers(1, -46)
+passenger_train1.change_fuel(100)
+print(passenger_train1.move(17))
+passenger_train1.change_passengers(1, -46)
 passenger_car3 = passenger_train1.remove_car(-1)
 print(passenger_car3.get_passengers_number())
+
+
 
 
