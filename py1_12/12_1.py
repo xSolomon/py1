@@ -23,8 +23,6 @@ class Unit:
         self.__min_damage : int = min_damage # Минимальный урон
         self.__max_damage : int = max_damage # Максимальный урон
         logging.info(f'Создан объект {Unit}')
-        assert self.__attack >= 0 and self.__defence >= 0 and self.__health >= 1 \
-            and self.__speed >= 0 and self.__min_damage >= 0 and self.__max_damage >= min_damage
         
     def print(self) -> None:
         ''' Вывод информации о юните '''
@@ -48,8 +46,6 @@ class Castle:
         self.__available_units : int = available_units # Количество существ, доступных для найма
         self.__units_in_harrizon : int = units_in_harrizon # Количество существ в гарнизоне замка
         logging.info(f'Создан объект {self}')
-        assert self.__money >= 0 and self.__income >= 0 and self.__unit_income >= 0 \
-            and self.__available_units >= 0 and self.__units_in_harrizon >= 0
     
     def get_name(self) -> str:
         return self.__name
@@ -60,7 +56,7 @@ class Castle:
     def set_units_in_harrizon(self, value) -> None:
         self.__units_in_harrizon = 0 if value <= 0 else value
         logging.info(f'У объекта Castle с именем {self.__name} изменено поле units_in_harrizon')
-        assert self.__units_in_harrizon >= 0
+        self.check_class_invariant()
     
     def upgrade_income(self) -> None:
         ''' Увеличивает ежедневный доход замка, затрачивая деньги '''
@@ -68,7 +64,7 @@ class Castle:
             self.__money -= 5000
             self.__income += 2000
             logging.info(f'Повышен доход в замке {self.__name}')
-        assert self.__money >= 0
+        self.check_class_invariant()
         
     def upgrade_unit_income(self) -> None:
         ''' За плату увеличивает еженедельный прирост существ '''
@@ -76,7 +72,7 @@ class Castle:
             self.__money -= 1500
             self.__unit_income += 25
             logging.info(f'Повышен приход войск в замке {self.__name}')
-        assert self.__money >= 0
+        self.check_class_invariant()
         
     def buy_units(self) -> None:
         ''' Купить часть доступных для найма существ и поместить их в гарнизон '''
@@ -85,7 +81,7 @@ class Castle:
             self.__available_units -= 20
             self.__units_in_harrizon += 20
             logging.info(f'В замке {self.__name} куплены войска и размещены в гарнизоне')
-        assert self.__money >= 0  and self.__available_units >= 0
+        self.check_class_invariant()
         
     def refill(self) -> None:
         ''' Каждую неделю число доступных для найма существ и денег увеличивается
@@ -93,7 +89,14 @@ class Castle:
         self.__available_units += self.__unit_income
         self.__money += self.__income
         logging.info(f'В замке {self.__name} приросло количество денег и существ')
-        
+        self.check_class_invariant()
+    
+    def check_class_invariant(self) -> None:
+        ''' Проверяет, что количество денег, армии для найма и в гарнизоне,
+            прирост денег и армии, неотрицательны'''
+        assert self.__money >= 0 and self.__income >= 0 and self.__unit_income >= 0 and \
+            self.__available_units >= 0 and self.__units_in_harrizon >= 0
+    
     def print(self) -> None:
         ''' Вывод информации о замке '''
         print(f'Имя: {self.__name}')
@@ -118,28 +121,28 @@ class Hero:
         self.__spell_power : int = spell_power # Сила заклинаний
         self.__knowledge : int = knowledge # Знания
         logging.info(f'Создан объект {self}')
-        assert self.__level >= 0 and self.__move_points >= 0 and self.__units_in_army >= 0 \
-            and self.__attack >= 0 and self.__defence >= 0 and self.__spell_power >= 0 and self.__knowledge >= 0
         
     def move(self) -> bool:
         ''' Герой двигается по карте '''
+        success : bool = False
         if self.__move_points >= 500:
             self.__move_points -= 500
             self.__is_in_castle = False
+            success = True
             logging.info(f'Герой {self.__name} совершил передвижение по карте')
-            assert self.__move_points >= 0
-            return True
-        return False
+        self.check_class_invariant()
+        return success
     
     def return_to_castle(self) -> bool:
         ''' Герой возвращается в ближайший замок '''
+        success : bool = False
         if self.__move_points >= 500:
             self.__move_points -= 500
             self.__is_in_castle = True
+            success = True
             logging.info(f'Герой {self.__name} вернулся в замок')
-            assert self.__move_points >= 0
-            return True
-        return False
+        self.check_class_invariant()
+        return success
         
     def rest(self) -> None:
         ''' Герой отдыхает ночью, восстанавливая запас хода '''
@@ -148,6 +151,7 @@ class Hero:
         
     def level_up(self) -> bool:
         ''' Герой ищет на карте сражения, получая новый уровень и увеличивая атрибут '''
+        success : bool = False
         if self.__move_points >= 1500 and self.__units_in_army >= 15:
             self.__move_points -= 1500
             self.__is_in_castle = False
@@ -162,28 +166,31 @@ class Hero:
                     self.__spell_power += 1
                 case 4:
                     self.__knowledge += 1
-            assert self.__move_points >= 0 and self.__units_in_army >= 0
+            success = True
             logging.info(f'Герой {self.__name} поднял уровень')
-            return True
-        return False
+        self.check_class_invariant()
+        return success
                     
     def take_army_from_castle_harrizon(self, army : int, castle :  Castle) -> bool:
         ''' Герой забирает армию из гарнизона любого из городов, при условии его
             нахождения в каком-нибудь из замков и наличии достаточного количества существ '''
+        success : bool = False
         if self.__is_in_castle and army >= 0 and castle.get_units_in_harrizon() >= army:
             self.__units_in_army += army
             castle.set_units_in_harrizon(castle.get_units_in_harrizon() - army)
+            success = True
             logging.info(f'Герой {self.__name} забрал армию из замка {castle.get_name()}')
-            return True
-        return False
+        self.check_class_invariant()
+        return success
         
     def refill_army(self, castle : Castle) -> bool:
         ''' Герой возвращается в замок и пополняет армию '''
-        if self.return_to_castle() and self.take_army_from_castle_harrizon(50, castle):
-            assert self.__move_points >= 0
-            return True
-        return False
-        
+        return self.return_to_castle() and self.take_army_from_castle_harrizon(50, castle)
+    
+    def check_class_invariant(self) -> None:
+        ''' Проверяет, что запас очков движения и количество армии героя неотрицательны '''
+        assert self.__move_points >= 0 and self.__units_in_army >= 0
+     
     def print(self) -> None:
         ''' Вывод информации о герое '''
         print(f'Имя: {self.__name}')
@@ -228,4 +235,4 @@ castle2.buy_units()
 hero2.refill_army(castle2)
 castle2.print()
 print()
-hero2.print()
+hero2.print() 
