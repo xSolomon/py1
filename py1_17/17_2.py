@@ -5,7 +5,9 @@ from directory import directory_content
 def write_text_in_center_and_save_as(from_ext : str, to_ext : str) -> None:
     ''' Изменяет формат всех изображений указанного расширения в текущем каталоге.
         Также в центре каждого изображения рисует квадрат и пишет внутри этого квадрата текст'''
-    for im in directory_content('.', from_ext, False)[0]:
+    success : bool = True
+    image_list : list[str] = directory_content('.', from_ext, False)[0]
+    for im in image_list:
         try:
             image : Image = Image.open(im)
             if to_ext == '.jpg' and image.mode in ('RGBA', 'P'):
@@ -19,4 +21,6 @@ def write_text_in_center_and_save_as(from_ext : str, to_ext : str) -> None:
             image.save(os.path.splitext(im)[0] + to_ext)
             del canvas
         except:
-            print(f'Ошибка при попытке изменения расширения изображения {im}')
+            success = False
+    return success
+    
